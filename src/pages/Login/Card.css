@@ -1,0 +1,8 @@
+.card-login{
+    padding: 50px;
+    border-radius: 15px;
+}
+.card-input{
+    display: grid;
+    row-gap: 30px;
+}

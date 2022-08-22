@@ -1,25 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Box, ButtonGroup, Button } from '@mui/material';
+import { Route, Routes, Link, useNavigate } from 'react-router-dom';
+import { Private } from './pages/Private';
+import { Acess } from './pages/Acess';
+import { RequireAuth } from './contexts/Auth/RequireAuth';
+import { useContext } from 'react';
+import { AuthContext } from './contexts/Auth/AuthContext';
 
 function App() {
+  const auth = useContext(AuthContext)
+  const navigate = useNavigate();
+
+  const handleLogOut = async () => {
+    await auth.signOut();
+    navigate('/');
+
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <Box className="App">
+
+      <Box className='Header-App'>
+      <header >
+        <h1>header</h1>
+        <nav>
+          {auth.user &&
+            <Box>
+              <ButtonGroup variant="outlined" aria-label="outlined button group">
+                <Button href='/'>Acess</Button>
+                <Button href='/private'>Privado</Button>
+                <Button href='/' onClick={handleLogOut} >Sair</Button>
+              </ButtonGroup>
+            </Box>
+          }
+        </nav>
       </header>
-    </div>
+      </Box>
+
+      <Box className='Body-App'>
+        <Routes>
+          <Route path="/" element={<RequireAuth><Acess /></RequireAuth>} />
+          <Route path="/private" element={<RequireAuth><Private /></RequireAuth>} />
+        </Routes>
+      </Box>
+
+
+    </Box>
   );
 }
 
